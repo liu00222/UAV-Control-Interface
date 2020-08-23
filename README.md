@@ -13,6 +13,7 @@ I do think there are other things you need to know, like the high-level task sce
 | collector                |   An app to collect gesture data      |
 | recognizer               |   APIs to train the recognizer        |
 | server                   |   Some ROS server nodes serves as a bridge between the simulator and the interface; an offline server that is independent to ROS; also some ROS related contents I used   |
+| pictures.                |   Some screenshots used to illustrate the readme file        |
 
 ## 2. AI Touch Interface
 
