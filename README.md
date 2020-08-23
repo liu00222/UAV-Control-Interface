@@ -131,7 +131,10 @@ The requirements above are just the necessary environment for my **current works
 
 ### Introduction to ROS
 
-I highly recommend you to go through the [Beginner's level of ROS's official tutorial](http://wiki.ros.org/ROS/Tutorials) first. Don't overlook it from its tag, "begginer". The key things to use ROS to control robots in the simulator are inside of the beginner's level of ROS. 
+I highly recommend you to go through the [Beginner's level of ROS's official tutorial](http://wiki.ros.org/ROS/Tutorials) first. Don't overlook it from its tag, "begginer". The key things to use ROS to control robots in the simulator are inside of the beginner's level of ROS. The worst thing of ROS is that there is no enough high-quality outside tutorial of it (at least I did not find any), so it seems that the only choice to get into it may be reading its docs. 
 
 ### Preparation before running ROS and the Simulator
 
+The world settings and the robots models are from outside sources. I currently use the [RotorS Simulator](https://github.com/ethz-asl/rotors_simulator), which is a work in Gazebo. You can follow their instruction to install the simulator. RotorS was developed by researchers in ETH and they have several publication around it, so we will need to cite their works when we step into the paper-wirting part. 
+
+If you fail to install RotorS, don't feel sad as I also failed several weeks ago. You can go to [BeboS](https://github.com/gsilano/BebopS). BebopS is a helper package to help you install RotorS simulator. As long as you follow BebopS's instruction of installation and succeed, you will suprisingly find that the packges of RotorS simulator are also on your computer. Now you can launch RotorS simulator by the commands introduced in the GitHub page of RotorS simulator. 
