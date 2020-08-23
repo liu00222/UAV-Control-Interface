@@ -107,6 +107,14 @@ Now, you can build the project and run it. The XCode built-in iOS devide simulat
 
 If you do not know how to run it on your own iPad, you can check [Apple's official document](https://developer.apple.com/documentation/xcode/running_your_app_in_the_simulator_or_on_a_device) or contact me. 
 
-## 3. ROS and Simulator
+Note that now you may use the offline server to connect to the interface. Later you may go to ROS and you can open the server node there to receive messages from the interface. After you have some knowledge in ROS and Gazebo (the simulator), you will know how to start the server there. 
 
-                   
+## 3. ROS and the Simulator
+
+Operating System: Ubuntu 16.04
+
+ROS version: kinetic
+
+Gazebo version: Gazebo7
+
+
