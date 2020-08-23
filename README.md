@@ -12,12 +12,19 @@ This is the GitHubt repository for CRAI Project 7, developing an AI touch interf
 | recognizer               |   APIs to train the recognizer        |
 | server                   |   Some ROS server nodes serves as a bridge between the simulator and the interface; an offline server that is independent to ROS; also some ROS related contents I used   |
 
-## 2. Interface
+## 2. AI Touch Interface
+
+### Preparation
 
 Python version: 3.7.4
 
 Packages: [kivy](https://kivy.org/#home), [numpy](https://numpy.org/)
 
+```
+# Installation
+pip3 install kivy
+pip3 install numpy
+```
 
 ## 3. ROS and Simulator
 
