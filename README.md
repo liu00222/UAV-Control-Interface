@@ -1,6 +1,8 @@
 # ai-touch-interface
 
-This is the GitHubt repository for CRAI Project 7, developing an AI touch interface to control multi-robots system. 
+This is the GitHubt repository for CRAI Project 7, developing an AI touch interface to control multi-robots system. The readme here consists of instructions on how to prepare the environment for the project and run the app and simulation. 
+
+I do think there are other things you need to know, like the high-level task scenarios in the simulation and task expectation. I will send you separate emails on those topics. 
 
 ## 1. Description
 
