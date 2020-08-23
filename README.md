@@ -95,9 +95,13 @@ toolchain create AI-Interface ~/Desktop/work/CRAI/dev
 
 Then, open the newly created project file which is proj_name + "-ios", and open the .xcodeproj file. Before you can actually build and run the XCode project, you need to do two things: 
 
-1. Add the team name under the Signing & Capability section. 
+1. Add the team name under the Signing & Capability section. A screenshot may give you some hints: 
+
+![picture1](https://github.com/liu00222/ai-touch-interface/blob/master/pictures/picture1.png)
 
 2. Make sure that the iOS deployment target under the Build Setting section is iOS 9.0 or above. 
+
+![picture1](https://github.com/liu00222/ai-touch-interface/blob/master/pictures/picture2.png)
 
 Now, you can build the project and run it. The XCode built-in iOS devide simulators are relatively slow, so I would recommend you to use your own iPad. Mine is iPad Air 3rd generation, so I designed the UI based on its sreen size. If you are running on other machines, it may be somewhat creepy. I will adjust this later. 
 
