@@ -138,3 +138,41 @@ I highly recommend you to go through the [Beginner's level of ROS's official tut
 The world settings and the robots models are from outside sources. I currently use the [RotorS Simulator](https://github.com/ethz-asl/rotors_simulator), which is a work in Gazebo. You can follow their instruction to install the simulator. RotorS was developed by researchers in ETH and they have several publication around it, so we will need to cite their works when we step into the paper-wirting part. 
 
 If you fail to install RotorS, don't feel sad as I also failed several weeks ago. You can go to [BeboS](https://github.com/gsilano/BebopS). BebopS is a helper package to help you install RotorS simulator. As long as you follow BebopS's instruction of installation and succeed, you will suprisingly find that the packges of RotorS simulator are also on your computer. Now you can launch RotorS simulator by the commands introduced in the GitHub page of RotorS simulator. 
+
+### Run the Demo that I showed during our first meeting
+
+You will notice that "rotors_gazebo" is a package of [RotorS Simulator](https://github.com/ethz-asl/rotors_simulator). I made some changes to several files in the package in order to make it fit our project. The changed files are in "server/rotors_gazebo". You can copy the files on our repository to replace the files in their package. The changed (or newly added) files are "CMakeLists.txt", 7 C++ sources in "src", and 2 launch files in "launch". 
+
+For the server node, you can create a new package with any name in your catkin workspace. Then create a folder called "scripts" in that new package. Then you just copy and paste the "touch_interface_server.py" and "touch_interface_server_swarm.py" into the "scripts" folder. I use Python to write the server, because using Python means you don't need to run "catkin build" again to build the project, which will break down your simulation. If you feel using C++ is better, please feel free to move to that. Just remember to let me know before it. 
+
+To run my current simple tiny simulation, open two terminals. After building the catkin project, in the first terminal, type and run the command: 
+
+```
+$ roslaunch rotors_gazebo mav_hovering_example.launch mav_name:=firefly world_name:=basic
+```
+
+The Gazebo window will pop out with one drone in it. Then, in the second terminal, type and run the command: 
+
+```
+$ python src/your_package_name/scripts/touch_interface_server.py
+```
+
+For example, I put the server into the package "beginner_tutorials". So the command would be: 
+
+```
+$ python src/beginner_tutorials/scripts/touch_interface_server.py
+```
+
+To run the simulation with multiple robots, you can just do the following. In the first terminal: 
+
+```
+$ roslaunch rotors_gazebo crai_firefly_swarm.launch mav_name:=firefly world_name:=basic
+```
+
+Then, in the second terminal, run the corresponding server: 
+
+```
+$ python src/your_package_name/scripts/touch_interface_server_swarm.py
+```
+
+After the simulation and the server start successfully, you can open the interface again to play with the demo, as the video I showed you in our first meeting on Friday. 
