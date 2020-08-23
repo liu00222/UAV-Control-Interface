@@ -5,8 +5,8 @@ This is the GitHubt repository for CRAI Project 7, developing an AI touch interf
 ## 1. Description
 
 
-| Folder Names             |   Contents.                           |
-| ------------------------ | -------------------------------------:|
+| Folder Names             |   Contents                            |
+| ------------------------ | ------------------------------------- |
 | ai-touch-interface       |   Interface                           |
 | collector                |   An app to collect gesture data      |
 | recognizer               |   APIs to train the recognizer        |
