@@ -99,7 +99,7 @@ Then, open the newly created project file which is proj_name + "-ios", and open 
 
 ![picture1](https://github.com/liu00222/ai-touch-interface/blob/master/pictures/picture1.png)
 
-2. Make sure that the iOS deployment target under the Build Setting section is iOS 9.0 or above. 
+2. Make sure that the iOS deployment target under the Build Setting section is iOS 9.0 or above. You can also refer to the screenshot below to get some ideas:
 
 ![picture1](https://github.com/liu00222/ai-touch-interface/blob/master/pictures/picture2.png)
 
