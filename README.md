@@ -26,6 +26,14 @@ pip3 install kivy
 pip3 install numpy
 ```
 
+### Run the program on computers
+
+Before running the program: 
+
+1. Run a server first. The server can be found in the "server" folder. The best one to begin is the "offline_server.py". You can run it anywhere even without ROS. Before running the offline server, make sure to adjust its IP address and the port number. 
+
+2. Adjust the IP address and the port number in the "main.py" in "ai-touch-interface/dev/" to fit the server. 
+
 ## 3. ROS and Simulator
 
                    
