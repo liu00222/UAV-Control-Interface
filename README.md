@@ -111,15 +111,27 @@ Note that now you may use the offline server to connect to the interface. Later 
 
 ## 3. ROS and the Simulator
 
-### Preparation
+### Preparation before starting everything
 
 Operating System: Ubuntu 16.04
 
-ROS version: kinetic
+ROS version: Kinetic Kame
 
 Gazebo version: Gazebo7
 
 Note that these three versions are strictly fit. The next generation of this bundle is Ubuntu 18.04 + ROS melodic + Gazebo9. Make sure that the versions of these three match each other, otherwise you will suffer from the same pain as I had 2 weeks ago, keeping re-installing everything and begging them to work. 
 
-However, the requirements above are just the necessary environment for my **current works in ROS**. If you feel like a newer version, like 
+The detailed documentation about how to install ROS can be found on their [offcial website](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment). You don't need to install Gazebo on purpose. It will come with the installation of ROS. Once you install ROS successfully, try this to make sure that Gazebo is there and its version is compatible with your ROS version: 
+
+```
+$ gazebo --version
+```
+
+The requirements above are just the necessary environment for my **current works in ROS**. If you feel like a newer version would be better for you to complete the work, feel free to move towards that. 
+
+### Introduction to ROS
+
+I highly recommend you to go through the [Beginner's level of ROS's official tutorial](http://wiki.ros.org/ROS/Tutorials) first. Don't overlook it from its tag, "begginer". The key things to use ROS to control robots in the simulator are inside of the beginner's level of ROS. 
+
+### Preparation before running ROS and the Simulator
 
