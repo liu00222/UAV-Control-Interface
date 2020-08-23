@@ -111,10 +111,15 @@ Note that now you may use the offline server to connect to the interface. Later 
 
 ## 3. ROS and the Simulator
 
+### Preparation
+
 Operating System: Ubuntu 16.04
 
 ROS version: kinetic
 
 Gazebo version: Gazebo7
 
+Note that these three versions are strictly fit. The next generation of this bundle is Ubuntu 18.04 + ROS melodic + Gazebo9. Make sure that the versions of these three match each other, otherwise you will suffer from the same pain as I had 2 weeks ago, keeping re-installing everything and begging them to work. 
+
+However, the requirements above are just the necessary environment for my **current works in ROS**. If you feel like a newer version, like 
 
