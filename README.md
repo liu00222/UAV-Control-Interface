@@ -14,7 +14,9 @@ This is the GitHubt repository for CRAI Project 7, developing an AI touch interf
 
 ## 2. Interface
 
-All the interface related deliveries are included 
+Python version: 3.7.4
+
+Packages: [kivy](https://kivy.org/#home), [numpy](https://numpy.org/)
 
 
 ## 3. ROS and Simulator
