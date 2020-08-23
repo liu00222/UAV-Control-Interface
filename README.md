@@ -163,7 +163,7 @@ For example, I put the server into the package "beginner_tutorials". So the comm
 $ python src/beginner_tutorials/scripts/touch_interface_server.py
 ```
 
-To run the simulation with multiple robots, you can just do the following. In the first terminal: 
+As long as the server starts, you can send commands from your hand gestures to the simulation. The controllers I currently use in the simulation are simple. To run the simulation with multiple robots, you can just do the following. In the first terminal: 
 
 ```
 $ roslaunch rotors_gazebo crai_firefly_swarm.launch mav_name:=firefly world_name:=basic
