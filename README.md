@@ -118,7 +118,7 @@ Note that now you may use the offline server to connect to the interface. Later 
 
 Operating System: [Ubuntu 16.04](https://releases.ubuntu.com/16.04/?_ga=2.73618645.615752798.1598417073-1774150147.1598417073)
 
-ROS version: Kinetic Kame
+ROS version: [Kinetic Kame](http://wiki.ros.org/kinetic/Installation)
 
 Gazebo version: Gazebo7
 
