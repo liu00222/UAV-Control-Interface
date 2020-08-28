@@ -28,7 +28,9 @@ Packages: [kivy](https://kivy.org/#home), [numpy](https://numpy.org/)
 ```
 # Installation
 $ pip3 install kivy
-$ pip3 install numpy
+$ pip3 install numpy 
+$ sudo apt-get install python3-numpy
+
 ```
 
 ### Run the app on computers
