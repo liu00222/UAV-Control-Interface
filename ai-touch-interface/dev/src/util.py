@@ -5,10 +5,6 @@ from src.glob import *
 from src.mymath import my_rounding
 
 
-def rotate_cube(*dt):
-    s.send("none".encode('utf-8'))
-
-
 def adjust_aspect(*args):
     app = App.get_running_app()
     rsize = app.renderer.size
@@ -109,100 +105,166 @@ def stabilize_view(camera_pose_x, camera_pose_y, camera_pose_z):
     app.camera.look_at(ORIGIN)
 
 
-def move_robots(cmd, distance):
+def move_robots(cmd, distance, num_robot):
     app = App.get_running_app()
     if cmd == "leftward":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.y += 1.0
+        if num_robot >= 1:
+            position_1[2] -= 1
+        if num_robot >= 2:
+            position_2[2] -= 1
+        if num_robot >= 3:
+            position_3[2] -= 1
+        if num_robot >= 4:
+            position_4[2] -= 1
+        if num_robot >= 5:
+            position_5[2] -= 1
 
     elif cmd == "rightward":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.y -= 1.0
+        if num_robot >= 1:
+            position_1[2] += 1
+        if num_robot >= 2:
+            position_2[2] += 1
+        if num_robot >= 3:
+            position_3[2] += 1
+        if num_robot >= 4:
+            position_4[2] += 1
+        if num_robot >= 5:
+            position_5[2] += 1
 
     elif cmd == "forward":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.x += 1.0
+        if num_robot >= 1:
+            position_1[0] += 1
+        if num_robot >= 2:
+            position_2[0] += 1
+        if num_robot >= 3:
+            position_3[0] += 1
+        if num_robot >= 4:
+            position_4[0] += 1
+        if num_robot >= 5:
+            position_5[0] += 1
 
     elif cmd == "backward":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.x -= 1.0
+        if num_robot >= 1:
+            position_1[0] -= 1
+        if num_robot >= 2:
+            position_2[0] -= 1
+        if num_robot >= 3:
+            position_3[0] -= 1
+        if num_robot >= 4:
+            position_4[0] -= 1
+        if num_robot >= 5:
+            position_5[0] -= 1
 
     elif cmd == "upward":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.z += 1.0
+        if num_robot >= 1:
+            position_1[1] += 1
+        if num_robot >= 2:
+            position_2[1] += 1
+        if num_robot >= 3:
+            position_3[1] += 1
+        if num_robot >= 4:
+            position_4[1] += 1
+        if num_robot >= 5:
+            position_5[1] += 1
 
     elif cmd == "downward":
-        for i in range(len(app.cube)):
-            if app.cube[i].pos.z > 0:
-                app.cube[i].pos.z -= 1.0
+        if num_robot >= 1:
+            position_1[1] -= 1
+        if num_robot >= 2:
+            position_2[1] -= 1
+        if num_robot >= 3:
+            position_3[1] -= 1
+        if num_robot >= 4:
+            position_4[1] -= 1
+        if num_robot >= 5:
+            position_5[1] -= 1
 
     elif cmd == "land on":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.z = 0.0
+        if num_robot >= 1:
+            position_1[1] = 0
+        if num_robot >= 2:
+            position_2[1] = 0
+        if num_robot >= 3:
+            position_3[1] = 0
+        if num_robot >= 4:
+            position_4[1] = 0
+        if num_robot >= 5:
+            position_5[1] = 0
 
     elif cmd == "take off":
-        for i in range(len(app.cube)):
-            app.cube[i].pos.z = 1.0
+        if num_robot >= 1:
+            position_1[1] = 2
+        if num_robot >= 2:
+            position_2[1] = 2
+        if num_robot >= 3:
+            position_3[1] = 2
+        if num_robot >= 4:
+            position_4[1] = 2
+        if num_robot >= 5:
+            position_5[1] = 2
 
     elif cmd == "specific speed":
-        app.cube[0].pos.x = 0
-        app.cube[0].pos.y = -1 * distance
-        app.cube[0].pos.z = 1
-
-        app.cube[1].pos.x = distance
-        app.cube[1].pos.y = 0
-        app.cube[1].pos.z = 1
-
-        app.cube[2].pos.x = 0
-        app.cube[2].pos.y = distance
-        app.cube[2].pos.z = 1
-
-        app.cube[3].pos.x = -2 * distance
-        app.cube[3].pos.y = -2 * distance
-        app.cube[3].pos.z = 1
-
-        app.cube[4].pos.x = -2 * distance
-        app.cube[4].pos.y = 2 * distance
-        app.cube[4].pos.z = 1
+        if num_robot >= 1:
+            position_1[0] = 0
+            position_1[2] = 2 * distance
+            position_1[1] = 2
+        if num_robot >= 2:
+            position_2[0] = 2 * distance
+            position_2[2] = 0
+            position_2[1] = 2
+        if num_robot >= 3:
+            position_3[0] = 0
+            position_3[2] = -2 * distance
+            position_3[1] = 2
+        if num_robot >= 4:
+            position_4[0] = -4 * distance
+            position_4[2] = 4 * distance
+            position_4[1] = 2
+        if num_robot >= 5:
+            position_5[0] = -4 * distance
+            position_5[2] = -4 * distance
+            position_5[1] = 2
 
     elif cmd == "horizontal":
-        app.cube[0].pos.x = 0
-        app.cube[0].pos.y = -1 * distance
-        app.cube[0].pos.z = 1
-
-        app.cube[1].pos.x = 0
-        app.cube[1].pos.y = 0
-        app.cube[1].pos.z = 1
-
-        app.cube[2].pos.x = 0
-        app.cube[2].pos.y = distance
-        app.cube[2].pos.z = 1
-
-        app.cube[3].pos.x = 0
-        app.cube[3].pos.y = -2 * distance
-        app.cube[3].pos.z = 1
-
-        app.cube[4].pos.x = 0
-        app.cube[4].pos.y = 2 * distance
-        app.cube[4].pos.z = 1
+        if num_robot >= 1:
+            position_1[0] = 0
+            position_1[2] = 2 * distance
+            position_1[1] = 2
+        if num_robot >= 2:
+            position_2[0] = 0
+            position_2[2] = 0
+            position_2[1] = 2
+        if num_robot >= 3:
+            position_3[0] = 0
+            position_3[2] = -2 * distance
+            position_3[1] = 2
+        if num_robot >= 4:
+            position_4[0] = 0
+            position_4[2] = 4 * distance
+            position_4[1] = 2
+        if num_robot >= 5:
+            position_5[0] = 0
+            position_5[2] = -4 * distance
+            position_5[1] = 2
 
     elif cmd == "vertical":
-        app.cube[0].pos.x = -1 * distance
-        app.cube[0].pos.y = 0
-        app.cube[0].pos.z = 1
-
-        app.cube[1].pos.x = 0
-        app.cube[1].pos.y = 0
-        app.cube[1].pos.z = 1
-
-        app.cube[2].pos.x = distance
-        app.cube[2].pos.y = 0
-        app.cube[2].pos.z = 1
-
-        app.cube[3].pos.x = -2 * distance
-        app.cube[3].pos.y = 0
-        app.cube[3].pos.z = 1
-
-        app.cube[4].pos.x = 2 * distance
-        app.cube[4].pos.y = 0
-        app.cube[4].pos.z = 1
+        if num_robot >= 1:
+            position_1[0] = 2 * distance
+            position_1[2] = 0
+            position_1[1] = 2
+        if num_robot >= 2:
+            position_2[0] = 0
+            position_2[2] = 0
+            position_2[1] = 2
+        if num_robot >= 3:
+            position_3[0] = -2 * distance
+            position_3[2] = 0
+            position_3[1] = 2
+        if num_robot >= 4:
+            position_4[0] = 4 * distance
+            position_4[2] = 0
+            position_4[1] = 2
+        if num_robot >= 5:
+            position_5[0] = -4 * distance
+            position_5[2] = 0
+            position_5[1] = 2

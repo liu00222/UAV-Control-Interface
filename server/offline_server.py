@@ -23,7 +23,8 @@ class Server:
             data, address = self.s.recvfrom(1024)
             data = data.decode()
             if data == 'c':
-                self.s.sendto("5".encode('utf-8'), address)
+                self.s.sendto("3".encode('utf-8'), address)
+                self.s.sendto("offline_server".encode('utf-8'), address)
             if data != "none":
                 print(data)
             self.s.sendto("none".encode('utf-8'), address)

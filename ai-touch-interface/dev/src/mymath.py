@@ -1,8 +1,6 @@
 import numpy as np
 
-# transform the shape from 3D to 2D, then see if the current shape has any of the UAV
-# inside, if yes, we do not need to move the UAV, may move the rest
-#if no, then we need to move the UAV
+
 class Triangle2D:
     def __init__(self, a, b, c):
         self.a, self.b, self.c = [a[0], a[1]], [b[0], b[1]], [c[0], c[1]]

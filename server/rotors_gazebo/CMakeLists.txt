@@ -48,12 +48,16 @@ add_executable(hovering_example5 src/hovering_example5.cpp)
 target_link_libraries(hovering_example5 ${catkin_LIBRARIES})
 add_dependencies(hovering_example5 ${catkin_EXPORTED_TARGETS})
 
+add_executable(hovering_example6 src/hovering_example6.cpp)
+target_link_libraries(hovering_example6 ${catkin_LIBRARIES})
+add_dependencies(hovering_example6 ${catkin_EXPORTED_TARGETS})
+
 foreach(dir launch models resource worlds)
    install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
-install(TARGETS waypoint_publisher waypoint_publisher_file hovering_example hovering_example1 hovering_example2 hovering_example3 hovering_example4 hovering_example5
+install(TARGETS waypoint_publisher waypoint_publisher_file hovering_example hovering_example1 hovering_example2 hovering_example3 hovering_example4 hovering_example5 hovering_example6
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

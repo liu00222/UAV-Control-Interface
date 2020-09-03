@@ -38,3 +38,18 @@ NUM_PIXEL = 27
 
 # global socket connection
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# robots centralized properties
+speed_1 = 0.02
+speed_2 = 0.02
+speed_3 = 0.02
+speed_4 = 0.02
+speed_5 = 0.02
+
+position_1 = [0, 2, 2]
+position_2 = [0, 2, 0]
+position_3 = [0, 2, -2]
+position_4 = [0, 2, 4]
+position_5 = [0, 2, -4]
+
+OBJ_LENGTH = 14

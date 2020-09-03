@@ -13,6 +13,7 @@ from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from kivy.uix.image import Image
+from kivy.factory import Factory
 
 # import external packages
 from packages.kivy3.materials import Material
@@ -31,6 +32,7 @@ from src.robot import Robot
 from src.glob import *
 from src.mymath import Triangle2D
 from src.tracer import Tracer3
+import src.robot as robot
 
 # path to the current folder
 FOLDER = dirname(abspath(__file__))
@@ -43,83 +45,6 @@ def initialize_connect():
 
 class MainLayout(FloatLayout):
     message = StringProperty()
-
-    def initialize_display(self, app):
-        # deploy the box picture shown at the top-left cornor
-        c = Imglayout(
-            pos_hint={"center_x": 0, "center_y": 0},
-            size_hint=(0.1, 0.1)
-        )
-        self.add_widget(c)
-        app.im.keep_ratio = False
-        app.im.allow_stretch = False
-        c.add_widget(app.im)
-
-        # visualize the robots as cubes and initialize the camera
-        with self.canvas.before:
-            layout = FloatLayout()
-            app.renderer = Renderer()
-            scene = Scene()
-            loader = OBJLoader()
-
-            app.cube = [INITIAL_CUBE] * len(self.robot_list)
-
-            app.floor = Mesh(geometry=BoxGeometry(10, 10, 0.1),
-                             material=Material(transparency=0.5,
-                                               color=(0.663, 0.663, 0.663),
-                                               specular=(0.5, 0.5, 0.5)))
-            scene.add(app.floor)
-
-            for i in range(len(self.robot_list)):
-                self.robots_ids.append(self.robot_list[i].id)
-                if self.robot_list[i].type == UGV:
-                    app.cube[i] = Mesh(geometry=BoxGeometry(self.robot_list[i].length,
-                                                            self.robot_list[i].width,
-                                                            self.robot_list[i].height
-                                                            ),
-                                       material=Material(transparency=0.8, color=WHITE, specular=(100, 0, 0))
-                                       )
-                elif self.robot_list[i].type == UAV:
-                    obj = loader.load(join(FOLDER, 'data', 'sphere.obj'))
-                    app.cube[i] = obj.children[0]
-                    app.cube[i].scale = (0.1, 0.1, 0.1)
-
-                # set the position of the object
-                app.cube[i].pos.x = self.robot_list[i].x
-                app.cube[i].pos.y = self.robot_list[i].y
-                app.cube[i].pos.z = self.robot_list[i].z
-                scene.add(app.cube[i])
-
-            # create camera for scene
-            app.camera = PerspectiveCamera(fov=75, aspect=0, near=0.1, far=1000)
-
-            app.camera.pos.x = 0
-            app.camera.pos.y = -20
-            app.camera.pos.z = 20
-            app.camera.look_at(ORIGIN)
-
-            # start rendering the scene and camera
-            app.renderer.render(scene, app.camera)
-            app.renderer.bind(size=util.adjust_aspect)
-
-            layout.add_widget(app.renderer)
-            Clock.schedule_interval(util.rotate_cube, .01)
-
-        self.add_widget(layout)
-
-    def initialize_robot(self):
-        if self.num_robot == 1:
-            for i in range(1):
-                pose, addr = self.s.recvfrom(1024)
-                pose = pose.decode('utf-8').split(',')
-                x, y, z = 0.0, 0.0, 1.0
-                self.robot_list.append(Robot(str(i), x, y, z, 0.1, 0.1, 0.1, UAV))
-        else:
-            self.robot_list.append(Robot(str(0), 0.0, -1.0, 1.0, 0.1, 0.1, 0.1, UAV))
-            self.robot_list.append(Robot(str(1), 0.0, 0.0, 1.0, 0.1, 0.1, 0.1, UAV))
-            self.robot_list.append(Robot(str(2), 0.0, 1.0, 1.0, 0.1, 0.1, 0.1, UAV))
-            self.robot_list.append(Robot(str(3), 0.0, -2.0, 1.0, 0.1, 0.1, 0.1, UAV))
-            self.robot_list.append(Robot(str(4), 0.0, 2.0, 1.0, 0.1, 0.1, 0.1, UAV))
 
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
@@ -140,19 +65,125 @@ class MainLayout(FloatLayout):
         self.robots_selected = []
         self.mouse_points = []
         self.robots_ids = []
-
-        initialize_connect()
-        self.s = s
-        self.tracer = Tracer3(self.s)
         self.robot_list = []
 
-        self.s.send("c".encode('utf-8'))
+        # Set the connection to the server
+        initialize_connect()
+        self.s = s
 
+        # Send greeting message to the server and save the feedback
+        self.s.send("c".encode('utf-8'))
         data, addr = self.s.recvfrom(1024)
         self.num_robot = int(data.decode('utf-8'))
+        self.world_name, addr = self.s.recvfrom(1024)
 
+        # Initialize tracer
+        self.tracer = Tracer3(self.s, self.num_robot)
+
+        # Initialize the robots settings and the 3D environment
         self.initialize_robot()
         self.initialize_display(app)
+
+    def add_robot(self, keyword):
+        if keyword == 0:
+            self.robot_list.append(Robot(str(0), 0.0, 2.0, 2.0, 0.1, 0.1, 0.1, UAV))
+        if keyword == 1:
+            self.robot_list.append(Robot(str(1), 0.0, 2.0, 0.0, 0.1, 0.1, 0.1, UAV))
+        if keyword == 2:
+            self.robot_list.append(Robot(str(2), 0.0, 2.0, -2.0, 0.1, 0.1, 0.1, UAV))
+        if keyword == 3:
+            self.robot_list.append(Robot(str(3), 0.0, 2.0, 4.0, 0.1, 0.1, 0.1, UAV))
+        if keyword == 4:
+            self.robot_list.append(Robot(str(4), 0.0, 2.0, -4.0, 0.1, 0.1, 0.1, UAV))
+        return
+
+    def initialize_display(self, app):
+        # Deploy the box picture shown at the top-left cornor
+        c = Imglayout(
+            pos_hint={"center_x": 0, "center_y": 0},
+            size_hint=(0.1, 0.1)
+        )
+        self.add_widget(c)
+        app.im.keep_ratio = False
+        app.im.allow_stretch = False
+        c.add_widget(app.im)
+
+        # Set the 3D environment
+        with self.canvas.before:
+            # Initialize the render and scene
+            app.renderer = Renderer()
+            scene = Scene()
+            loader = OBJLoader()
+
+            # Add the floor plane
+            app.floor = Mesh(geometry=BoxGeometry(20, 0.1, 20),
+                             material=Material(transparency=0.5,
+                                               color=(0.663, 0.663, 0.663),
+                                               specular=(0.8, 0.8, 0.8)))
+            app.floor.pos.z = -0.1
+            scene.add(app.floor)
+
+            # Add robots models
+            app.cube = []
+            for i in range(self.num_robot):
+                self.robots_ids.append(self.robot_list[i].id)
+                if self.robot_list[i].type == UAV:
+                    obj = loader.load(join(FOLDER, 'data', 'round.obj')).children
+                    app.cube.extend(obj)
+
+                    for j in range(i * OBJ_LENGTH, (i + 1) * OBJ_LENGTH):
+                        # Adjust the size of the robot
+                        app.cube[j].scale = (0.005, 0.005, 0.005)
+
+                        # Set the position of the robot
+                        app.cube[j].pos.x = self.robot_list[i].x
+                        app.cube[j].pos.y = self.robot_list[i].y
+                        app.cube[j].pos.z = self.robot_list[i].z
+                        app.cube[j].rotation.x = -90
+                        scene.add(app.cube[j])
+
+            # Set the perspective camera
+            app.camera = PerspectiveCamera(fov=80, aspect=0, near=1, far=10000)
+            app.camera.pos.x = 0
+            app.camera.pos.y = 20
+            app.camera.pos.z = 20
+            app.camera.look_at(ORIGIN)
+
+            # Start rendering the scene and camera
+            app.renderer.render(scene, app.camera)
+            app.renderer.bind(size=util.adjust_aspect)
+
+            # Callback functions for animation
+            if self.num_robot >= 1:
+                Clock.schedule_interval(robot.update_robot_1_x, .01)
+                Clock.schedule_interval(robot.update_robot_1_y, .01)
+                Clock.schedule_interval(robot.update_robot_1_z, .01)
+
+            if self.num_robot >= 2:
+                Clock.schedule_interval(robot.update_robot_2_x, .01)
+                Clock.schedule_interval(robot.update_robot_2_y, .01)
+                Clock.schedule_interval(robot.update_robot_2_z, .01)
+
+            if self.num_robot >= 3:
+                Clock.schedule_interval(robot.update_robot_3_x, .01)
+                Clock.schedule_interval(robot.update_robot_3_y, .01)
+                Clock.schedule_interval(robot.update_robot_3_z, .01)
+
+            if self.num_robot >= 4:
+                Clock.schedule_interval(robot.update_robot_4_x, .01)
+                Clock.schedule_interval(robot.update_robot_4_y, .01)
+                Clock.schedule_interval(robot.update_robot_4_z, .01)
+
+            if self.num_robot >= 5:
+                Clock.schedule_interval(robot.update_robot_5_x, .01)
+                Clock.schedule_interval(robot.update_robot_5_y, .01)
+                Clock.schedule_interval(robot.update_robot_5_z, .01)
+        # Finally, add the the render to the current widget
+        self.add_widget(app.renderer)
+
+    def initialize_robot(self):
+        for i in range(self.num_robot):
+            self.add_robot(i)
 
     def on_touch_down(self, touch):
         with self.canvas.after:
@@ -208,10 +239,10 @@ class MainLayout(FloatLayout):
         points = []
         self.robots_selected = []
 
-        for i in range(len(app.cube)):
-            points.append(self.to_window_coordinates(np.array([app.cube[i].pos.x,
-                                                               app.cube[i].pos.y,
-                                                               app.cube[i].pos.z]),
+        for i in range(self.num_robot):
+            points.append(self.to_window_coordinates(np.array([app.cube[i * 14].pos.x,
+                                                               app.cube[i * 14].pos.y,
+                                                               app.cube[i * 14].pos.z]),
                                                      model_view.transpose(),
                                                      projection.transpose()))
 
@@ -258,32 +289,30 @@ class MainLayout(FloatLayout):
         Adjust the angle of view when users press the left top button
         """
         app = App.get_running_app()
-        if app.camera.pos.x == 0 and app.camera.pos.y == -20 and app.camera.pos.z == 20:
-            #app.camera.rot.x += 0.01
-
+        if app.camera.pos.x == 0 and app.camera.pos.y == 20 and app.camera.pos.z == 20:
             app.camera.pos.x = -20
-            app.camera.pos.y = 0
-            app.camera.pos.z = 20
+            app.camera.pos.y = 20
+            app.camera.pos.z = 0
             app.camera.look_at(ORIGIN)
-        elif app.camera.pos.x == -20 and app.camera.pos.y == 0 and app.camera.pos.z == 20:
+        elif app.camera.pos.x == -20 and app.camera.pos.y == 20 and app.camera.pos.z == 0:
             app.camera.pos.x = 0
             app.camera.pos.y = 20
-            app.camera.pos.z = 20
+            app.camera.pos.z = -20
             app.camera.look_at(ORIGIN)
-        elif app.camera.pos.x == 0 and app.camera.pos.y == 20 and app.camera.pos.z == 20:
+        elif app.camera.pos.x == 0 and app.camera.pos.y == 20 and app.camera.pos.z == -20:
             app.camera.pos.x = 20
-            app.camera.pos.y = 0
-            app.camera.pos.z = 20
+            app.camera.pos.y = 20
+            app.camera.pos.z = 0
             app.camera.look_at(ORIGIN)
-        elif app.camera.pos.x == 20 and app.camera.pos.y == 0 and app.camera.pos.z == 20:
+        elif app.camera.pos.x == 20 and app.camera.pos.y == 20 and app.camera.pos.z == 0:
             app.camera.pos.x = 0
-            app.camera.pos.y = 0
-            app.camera.pos.z = 20
+            app.camera.pos.y = 20
+            app.camera.pos.z = 1
             app.camera.look_at(ORIGIN)
             self.tracer.top_down_view = True
-        elif app.camera.pos.x == 0 and app.camera.pos.y == 0 and app.camera.pos.z == 20:
+        elif app.camera.pos.x == 0 and app.camera.pos.y == 20 and app.camera.pos.z == 1:
             app.camera.pos.x = 0
-            app.camera.pos.y = -20
+            app.camera.pos.y = 20
             app.camera.pos.z = 20
             app.camera.look_at(ORIGIN)
             self.tracer.top_down_view = False
@@ -314,14 +343,16 @@ class MainLayout(FloatLayout):
         app = App.get_running_app()
         select = ""
         cancel = ""
-        for i in range(len(self.robot_list)):
+        for i in range(self.num_robot):
             if self.robot_list[i].id in robots_ids:
                 x, y, z = app.camera.pos.x, app.camera.pos.y, app.camera.pos.z
-                if app.cube[i].material.color == WHITE:
-                    app.cube[i].material.color = LIGHT_YELLOW
+                if app.cube[i * 14].material.color == WHITE:
+                    for j in range(OBJ_LENGTH):
+                        app.cube[i*14 + j].material.color = LIGHT_YELLOW
                     select += str(i) + " "
                 else:
-                    app.cube[i].material.color = WHITE
+                    for j in range(OBJ_LENGTH):
+                        app.cube[i*14 + j].material.color = WHITE
                     cancel += str(i) + " "
                 util.stabilize_view(x, y, z)
         if select:
@@ -338,7 +369,8 @@ class MainLayout(FloatLayout):
         app = App.get_running_app()
         for i in range(len(self.robot_list)):
             if self.robot_list[i].id in robots_ids:
-                app.cube[i].material.color = WHITE
+                for j in range(OBJ_LENGTH):
+                    app.cube[i*14 + j].material.color = WHITE
 
 
 class DrawApp(App):
