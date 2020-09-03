@@ -1,0 +1,1 @@
+../../../../../.private/bebop_msgs/share/roseus/ros/bebop_msgs/msg/Ardrone3AccessoryStateConnectedAccessories.l

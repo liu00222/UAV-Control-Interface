@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/liu00222/catkin_ws/devel/.private/bebop_description/setup.sh

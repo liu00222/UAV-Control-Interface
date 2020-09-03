@@ -1,0 +1,1 @@
+../../../../../.private/bebop_msgs/share/gennodejs/ros/bebop_msgs/msg/CommonAnimationsStateList.js

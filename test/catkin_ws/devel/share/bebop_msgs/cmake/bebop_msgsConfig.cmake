@@ -1,0 +1,1 @@
+../../../.private/bebop_msgs/share/bebop_msgs/cmake/bebop_msgsConfig.cmake

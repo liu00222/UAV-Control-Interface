@@ -1,0 +1,1 @@
+../../../../../.private/planning_msgs/share/roseus/ros/planning_msgs/msg/PolynomialSegment4D.l
