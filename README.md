@@ -167,13 +167,13 @@ $ roslaunch rotors_gazebo mav_hovering_example.launch mav_name:=firefly world_na
 The Gazebo window will pop out with one drone in it. Then, in the second terminal, type and run the command: 
 
 ```
-$ python src/your_package_name/scripts/touch_interface_server.py
+$ rosrun pkg_name touch_interface_server.py
 ```
 
 For example, I put the server into the package "beginner_tutorials". So the command would be: 
 
 ```
-$ python src/beginner_tutorials/scripts/touch_interface_server.py
+$ rosrun beginners_tutorial touch_interface_server.py
 ```
 
 As long as the server starts, you can send commands from your hand gestures to the simulation. 
@@ -187,7 +187,7 @@ $ roslaunch rotors_gazebo crai_firefly_swarm.launch mav_name:=firefly world_name
 Then, in the second terminal, run the corresponding server: 
 
 ```
-$ python src/your_package_name/scripts/touch_interface_server_swarm.py
+$ rosrun beginners_tutorial touch_interface_server_swarm.py
 ```
 
 After the simulation and the server start successfully, you can open the interface again to play with the demo, as the video I showed you in our first meeting on Friday. 
