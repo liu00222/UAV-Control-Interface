@@ -1,5 +1,0 @@
-beginner_tutorials
-/home/liu00222/catkin_ws/devel/.private/beginner_tutorials/cmake.lock /home/liu00222/catkin_ws/devel/./cmake.lock
-/home/liu00222/catkin_ws/devel/.private/beginner_tutorials/lib/pkgconfig/beginner_tutorials.pc /home/liu00222/catkin_ws/devel/lib/pkgconfig/beginner_tutorials.pc
-/home/liu00222/catkin_ws/devel/.private/beginner_tutorials/share/beginner_tutorials/cmake/beginner_tutorialsConfig-version.cmake /home/liu00222/catkin_ws/devel/share/beginner_tutorials/cmake/beginner_tutorialsConfig-version.cmake
-/home/liu00222/catkin_ws/devel/.private/beginner_tutorials/share/beginner_tutorials/cmake/beginner_tutorialsConfig.cmake /home/liu00222/catkin_ws/devel/share/beginner_tutorials/cmake/beginner_tutorialsConfig.cmake

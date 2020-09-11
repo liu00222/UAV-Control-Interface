@@ -1,1 +1,0 @@
-../../../../../.private/planning_msgs/share/roseus/ros/planning_msgs/msg/PolynomialTrajectory4D.l
