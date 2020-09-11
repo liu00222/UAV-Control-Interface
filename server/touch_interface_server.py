@@ -25,11 +25,6 @@ def make_pose_stamped(orientation, position):
     return msg
 
 
-def get_position(data):
-    global pose
-    pose = data
-
-
 class Server:
     def __init__(self):
         rospy.init_node('touch_interface_server', anonymous=True)
@@ -45,11 +40,26 @@ class Server:
         self.num_of_robots = 1
         self.land_on = False
 
+        self.interface_address = None
+
         self.x = 0.0
         self.y = 0.0
         self.z = 1.0
 
-        rospy.Subscriber('/firefly/ground_truth/pose', PoseStamped, get_position)
+        rospy.Subscriber('/firefly/ground_truth/pose', PoseStamped, self.get_position)
+
+    def make_str(self, x, y, z):
+        return (str(x) + '&' + str(y) + '&' + str(z))
+
+    def get_position(self, data):
+        if self.interface_address != None:
+            global pose
+            pose = data
+            x = data.pose.position.x
+            y = data.pose.position.y
+            z = data.pose.position.z
+
+            self.s.sendto((self.make_str(x, y, z)).encode('utf-8'), self.interface_address)
 
     def process_data(self, data, x, y, z, address):
         if data == "c":
@@ -136,15 +146,15 @@ class Server:
             # receive data from the ipad interface
             data, address = self.s.recvfrom(1024)
             data = data.decode('utf-8')
+            self.interface_address = address
 
             # print the command from ipad
-            if data != "none":
-                rospy.loginfo(data)
+            rospy.loginfo(data)
 
             self.process_data(data, self.x, self.y, self.z, address)
 
             # send data back to the ipad
-            self.s.sendto("none".encode('utf-8'), address)
+            # self.s.sendto("none".encode('utf-8'), address)
 
 
 if __name__ == '__main__':
