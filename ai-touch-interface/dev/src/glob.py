@@ -12,6 +12,7 @@ ORIGIN = [0, 0, 0]
 # interface modes
 SELECTION_MODE = 0
 GESTURE_MODE = 1
+VIEW_MODE = 2
 
 # mesh only used for initialization
 INITIAL_CUBE = Mesh(geometry=BoxGeometry(0, 0, 0),
@@ -24,6 +25,8 @@ INITIAL_CUBE = Mesh(geometry=BoxGeometry(0, 0, 0),
 # colors used to paint the robots
 LIGHT_YELLOW = (1.0, 1.0, .2)
 WHITE = (1.0, 1.0, 1.0)
+RED = (.9, .1, .1)
+OBSTACLE_COLOR = (0.8, 0.8, 0.8)
 
 # types of robots
 UAV = 0
@@ -40,16 +43,21 @@ NUM_PIXEL = 27
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # robots centralized properties
-speed_1 = 0.02
-speed_2 = 0.02
-speed_3 = 0.02
-speed_4 = 0.02
-speed_5 = 0.02
+coordinate_multiplier = 2.7
 
-position_1 = [0, 2, 2]
-position_2 = [0, 2, 0]
-position_3 = [0, 2, -2]
-position_4 = [0, 2, 4]
-position_5 = [0, 2, -4]
+position_1 = [0, coordinate_multiplier, coordinate_multiplier]
+position_2 = [0, coordinate_multiplier, 0]
+position_3 = [0, coordinate_multiplier, -coordinate_multiplier]
+position_4 = [0, coordinate_multiplier, 2*coordinate_multiplier]
+position_5 = [0, coordinate_multiplier, -2*coordinate_multiplier]
+position_t = [4, 0.1, -2*coordinate_multiplier]
 
 OBJ_LENGTH = 14
+TARGET_OBJ_LENGTH = 1
+
+robot_num = 0
+
+speed = 0.06
+target_speed = 0.1
+
+tolerance = 0.01

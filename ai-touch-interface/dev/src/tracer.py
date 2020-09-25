@@ -9,8 +9,7 @@ import src.util as util
 
 
 class Tracer3:
-    def __init__(self, s, num_robot):
-        self.num_robot = num_robot
+    def __init__(self, s):
 
         # Container for the touch points
         self.touch_points = []
@@ -22,20 +21,8 @@ class Tracer3:
         # Connection to the server
         self.s = s
 
-        # If the UAVs are landing on
-        self.land_on = False
-
         # If we are in the top_down view
         self.top_down_view = False
-
-        # The type of current formation
-        # ["none", "triangle", "horizontal", "vertical"]
-        self.formation = "none"
-
-        # The distance parameter in each formation
-        self.d = 1
-        self.v = 1
-        self.h = 1
 
         # Load the predictor (recognizer)
         with open("model/recognizer_1.pkl", "rb") as f:
@@ -98,49 +85,22 @@ class Tracer3:
             # s shape
             if prediction == 0:
                 self.s.send("specific speed".encode('utf-8'))
-                self.formation = "triangle"
-                self.d = 1
-                util.move_robots("specific speed", self.d, self.num_robot)
 
             # check
             elif prediction == 1:
                 self.s.send("decrease speed".encode('utf-8'))
-                if self.formation == "triangle":
-                    self.d = self.d * 0.8
-                    util.move_robots("specific speed", self.d, self.num_robot)
-                elif self.formation == "vertical":
-                    self.v = self.v * 0.8
-                    util.move_robots("vertical", self.v, self.num_robot)
-                elif self.formation == "horizontal":
-                    self.h = self.h * 0.8
-                    util.move_robots("horizontal", self.h, self.num_robot)
 
             # check reverse
             elif prediction == 2:
                 self.s.send("increase speed".encode('utf-8'))
-                if self.formation == "triangle":
-                    self.d = self.d * 1.2
-                    util.move_robots("specific speed", self.d, self.num_robot)
-                elif self.formation == "vertical":
-                    self.v = self.v * 1.2
-                    util.move_robots("vertical", self.v, self.num_robot)
-                elif self.formation == "horizontal":
-                    self.h = self.h * 1.2
-                    util.move_robots("horizontal", self.h, self.num_robot)
 
             # horizontal
             elif prediction == 3:
                 self.s.send("horizontal".encode('utf-8'))
-                self.formation = "horizontal"
-                self.h = 1
-                util.move_robots("horizontal", self.h, self.num_robot)
 
             # vertical
             elif prediction == 4:
                 self.s.send("vertical".encode('utf-8'))
-                self.formation = "vertical"
-                self.v = 1
-                util.move_robots("vertical", self.v, self.num_robot)
 
             # receive data from the server (currently useless, but left for future usage)
             temp_data, temp_addr = self.s.recvfrom(1024)
@@ -214,37 +174,16 @@ class Tracer3:
         # s shape
         if prediction == 0:
             self.s.send("specific speed".encode('utf-8'))
-            self.formation = "triangle"
-            self.d = 1
-            util.move_robots("specific speed", self.d, self.num_robot)
             return
 
         # check
         elif prediction == 1:
             self.s.send("decrease speed".encode('utf-8'))
-            if self.formation == "triangle":
-                self.d = self.d * 0.8
-                util.move_robots("specific speed", self.d, self.num_robot)
-            elif self.formation == "vertical":
-                self.v = self.v * 0.8
-                util.move_robots("vertical", self.v, self.num_robot)
-            elif self.formation == "horizontal":
-                self.h = self.h * 0.8
-                util.move_robots("horizontal", self.h, self.num_robot)
             return
 
         # check reverse
         elif prediction == 2:
             self.s.send("increase speed".encode('utf-8'))
-            if self.formation == "triangle":
-                self.d = self.d * 1.2
-                util.move_robots("specific speed", self.d, self.num_robot)
-            elif self.formation == "vertical":
-                self.v = self.v * 1.2
-                util.move_robots("vertical", self.v, self.num_robot)
-            elif self.formation == "horizontal":
-                self.h = self.h * 1.2
-                util.move_robots("horizontal", self.h, self.num_robot)
             return
 
         # horizontal
@@ -252,13 +191,9 @@ class Tracer3:
             if left_screen(start) and left_screen(end):
                 if slide_leftward(start, end):
                     self.s.send("leftward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("leftward", 0, self.num_robot)
                     return
                 elif slide_rightward(start, end):
                     self.s.send("rightward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("rightward", 0, self.num_robot)
                     return
             elif left_screen(start) and left_screen(end):
                 if slide_leftward(start, end):
@@ -273,39 +208,25 @@ class Tracer3:
             if left_screen(start) and left_screen(end):
                 if slide_upward(start, end):
                     self.s.send("forward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("forward", 0, self.num_robot)
                     return
                 elif slide_downward(start, end):
                     self.s.send("backward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("backward", 0, self.num_robot)
                     return
             elif right_screen(start) and right_screen(end):
                 if slide_upward(start, end):
                     self.s.send("upward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("upward", 0, self.num_robot)
                     return
                 elif slide_downward(start, end):
                     self.s.send("downward".encode('utf-8'))
-                    if not self.land_on:
-                        util.move_robots("downward", 0, self.num_robot)
                     return
 
         # from left bottom to right top
         elif prediction == 5:
             if left_screen(start) and right_screen(end):
                 self.s.send("take off".encode('utf-8'))
-                if self.land_on:
-                    util.move_robots("take off", 0, self.num_robot)
-                    self.land_on = False
                 return
             elif left_screen(end) and right_screen(start):
                 self.s.send("land on".encode('utf-8'))
-                if not self.land_on:
-                    util.move_robots("land on", 0, self.num_robot)
-                    self.land_on = True
                 return
 
         # from left top to right bottom

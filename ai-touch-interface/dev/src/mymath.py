@@ -64,3 +64,7 @@ def my_rounding(num):
     if num - int(num) >= 0.5:
         return int(num + 1)
     return int(num)
+
+
+def degree_to_radians(degree):
+    return degree * np.pi / 180.
