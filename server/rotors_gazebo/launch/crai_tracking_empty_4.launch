@@ -1,16 +1,16 @@
 <launch>
   <arg name="mav_name" default="firefly" />
-  <arg name="world_name" default="basic"/>
+  <!-- <arg name="world_name" default="basic"/> -->
+  <arg name="world_name" default= "forest_updated"/>
   <arg name="enable_logging" default="false"/>
   <arg name="enable_ground_truth" default="true"/>
   <arg name="paused" value="false"/>
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
     <!-- <arg name="debug" value="true"/> -->
-    <!-- <arg name="world_name" value="$(find rotors_gazebo)/worlds/forest_updated.world"/>-->
     <arg name="paused" value="$(arg paused)"/>
     <!-- <arg name="gui" value="false"/> -->
   </include>
@@ -78,13 +78,24 @@
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>
+
+<!--(target)-->
+ <!--<param name="robot_description" command="$(find xacro)/xacro.py '$(find rotors_description)/urdf/mybot.xacro'"/>
+ <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model mybot"/> -->
+  <!-- MyBot -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find rotors_description)/urdf/mybot.xacro'"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- mybot has chassis, turtlebot has base_footprint -->
+  <node pkg="tf" type="static_transform_publisher" name="base" args="0 0 0 0 0 0 chassis base_footprint 100" />
+
+
 	
-	<param name="robot_description" command="$(find xacro)/xacro.py '$(find rotors_description)/urdf/mybot.xacro'"/>
-	<node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model mybot"/>
-	
+
 
 
 
 
 </launch>
-
