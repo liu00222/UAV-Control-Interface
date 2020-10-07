@@ -20,7 +20,7 @@ from packages.kivy3.materials import Material
 from packages.kivy3.scene import Scene
 from packages.kivy3.geometries import BoxGeometry
 from packages.kivy3.mesh import Mesh
-from packages.kivy3.objloader import OBJLoader
+from packages.kivy3.objloader import OBJLoader, OBJMTLLoader
 from packages.kivy3.renderer import Renderer
 from packages.kivy3.camera import PerspectiveCamera
 
@@ -122,7 +122,7 @@ class MainLayout(FloatLayout):
             loader = OBJLoader()
 
             # Add the floor plane
-            app.floor = Mesh(geometry=BoxGeometry(20, 0.1, 20),
+            app.floor = Mesh(geometry=BoxGeometry(30, 0.1, 30),
                              material=Material(transparency=0.5,
                                                color=(0.663, 0.663, 0.663),
                                                specular=(.0, .0, .0)))
@@ -174,7 +174,7 @@ class MainLayout(FloatLayout):
                 for j in range(TARGET_OBJ_LENGTH):
                     app.cube[(robot_num - 1) * OBJ_LENGTH + j].material.color = RED
 
-            # self.add_obstacles(app, scene)
+            self.add_obstacles(app, scene)
 
             # Set the perspective camera
             app.camera = PerspectiveCamera(fov=80, aspect=0, near=1, far=10000)
@@ -222,50 +222,115 @@ class MainLayout(FloatLayout):
         self.add_widget(app.renderer)
 
     def add_obstacles(self, app, scene):
-        # Add obstacles
-        app.b1 = Mesh(geometry=BoxGeometry(1, 8, 2),
-                      material=Material(transparency=0.8,
-                                        color=OBSTACLE_COLOR,
-                                        specular=(.0, .0, .0)))
-        app.b1.pos.y = 4-0.1
-        app.b1.pos.x = 3.5 * coordinate_multiplier
+        app.b1 = INITIAL_CUBE
+
+        loader = OBJMTLLoader()
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b1 = obj
+
+        # Adjust the size of the robot
+        app.b1.scale = (2, 2, 2)
+
+        #app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b1.material.specular = (-0.05, 0.05, -0.05)
+        #app.b1.material.transparency = 1.0
+        #app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b1.pos.x = -1.7*coordinate_multiplier
+        app.b1.pos.y = 3.33
+        app.b1.pos.z = 0*coordinate_multiplier
         scene.add(app.b1)
 
-        app.b2 = Mesh(geometry=BoxGeometry(1, 4, 2),
-                      material=Material(transparency=0.8,
-                                        color=OBSTACLE_COLOR,
-                                        specular=(.0, .0, .0)))
-        app.b2.pos.y = 2-0.1
-        app.b2.pos.x = 1.5 * coordinate_multiplier
-        app.b2.pos.z = -0.8 * coordinate_multiplier
+        app.b2 = INITIAL_CUBE
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b2 = obj
+
+        # Adjust the size of the robot
+        app.b2.scale = (2, 2, 2)
+
+        # app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b2.material.specular = (-0.05, 0.05, -0.05)
+        # app.b1.material.transparency = 1.0
+        # app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b2.pos.x = -3 * coordinate_multiplier
+        app.b2.pos.y = 3.33
+        app.b2.pos.z = 3 * coordinate_multiplier
         scene.add(app.b2)
 
-        app.b3 = Mesh(geometry=BoxGeometry(1, 7, 2),
-                      material=Material(transparency=0.8,
-                                        color=OBSTACLE_COLOR,
-                                        specular=(.0, .0, .0)))
-        app.b3.pos.y = 3.5-0.1
-        app.b3.pos.x = -0.9 * coordinate_multiplier
-        app.b3.pos.z = -0.3 * coordinate_multiplier
+        app.b3 = INITIAL_CUBE
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b3 = obj
+
+        # Adjust the size of the robot
+        app.b3.scale = (2, 2, 2)
+
+        # app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b3.material.specular = (-0.05, 0.05, -0.05)
+        # app.b1.material.transparency = 1.0
+        # app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b3.pos.x = 4 * coordinate_multiplier
+        app.b3.pos.y = 3.33
+        app.b3.pos.z = 3 * coordinate_multiplier
         scene.add(app.b3)
 
-        app.b4 = Mesh(geometry=BoxGeometry(1, 7, 2),
-                      material=Material(transparency=0.8,
-                                        color=OBSTACLE_COLOR,
-                                        specular=(.0, .0, .0)))
-        app.b4.pos.y = 3.5-0.1
-        app.b4.pos.x = -3.2 * coordinate_multiplier
-        app.b4.pos.z = 3 * coordinate_multiplier
+        app.b4 = INITIAL_CUBE
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b4 = obj
+
+        # Adjust the size of the robot
+        app.b4.scale = (2, 2, 2)
+
+        # app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b4.material.specular = (-0.05, 0.05, -0.05)
+        # app.b1.material.transparency = 1.0
+        # app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b4.pos.x = -5 * coordinate_multiplier
+        app.b4.pos.y = 3.33
+        app.b4.pos.z = -4 * coordinate_multiplier
         scene.add(app.b4)
 
-        app.b5 = Mesh(geometry=BoxGeometry(1, 7, 2),
-                      material=Material(transparency=0.8,
-                                        color=OBSTACLE_COLOR,
-                                        specular=(.0, .0, .0)))
-        app.b5.pos.y = 3.5-0.1
-        app.b5.pos.x = 3.2 * coordinate_multiplier
-        app.b5.pos.z = 3 * coordinate_multiplier
+        app.b5 = INITIAL_CUBE
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b5 = obj
+
+        # Adjust the size of the robot
+        app.b5.scale = (2, 2, 2)
+
+        # app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b5.material.specular = (-0.05, 0.05, -0.05)
+        # app.b1.material.transparency = 1.0
+        # app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b5.pos.x = -3 * coordinate_multiplier
+        app.b5.pos.y = 3.33
+        app.b5.pos.z = -4 * coordinate_multiplier
         scene.add(app.b5)
+
+        app.b6 = INITIAL_CUBE
+        obj = loader.load(join(FOLDER, 'data', 'lowpolytree.obj'), join(FOLDER, 'data', 'lowpolytree.mtl')).children[0]
+        app.b6 = obj
+
+        # Adjust the size of the robot
+        app.b6.scale = (2, 2, 2)
+
+        # app.b1.material.color = (0.0, 1.0, 0.0)
+        app.b6.material.specular = (-0.05, 0.05, -0.05)
+        # app.b1.material.transparency = 1.0
+        # app.b1.material.texture_ratio = 0.5
+
+        # Set the position of the robot
+        app.b6.pos.x = -1 * coordinate_multiplier
+        app.b6.pos.y = 3.33
+        app.b6.pos.z = -4 * coordinate_multiplier
+        scene.add(app.b6)
 
     def initialize_robot(self):
         for i in range(self.num_robot):
