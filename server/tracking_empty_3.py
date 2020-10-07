@@ -28,31 +28,6 @@ def make_pose_stamped(orientation, position):
     return msg
 
 
-def get_position1(data):
-    global pose1
-    pose1 = data
-
-
-def get_position2(data):
-    global pose2
-    pose2 = data
-
-
-def get_position3(data):
-    global pose3
-    pose3 = data
-
-
-def get_position4(data):
-    global pose4
-    pose4 = data
-
-
-def get_position5(data):
-    global pose5
-    pose5 = data
-
-
 class UAV:
     def __init__(self, x, y, z, identity):
         self.land_on = False
@@ -76,6 +51,8 @@ class Server:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.bind((self.host, self.port))
 
+        self.interface_address = None
+
         self.uav0 = UAV(0.0, -1.0, 1.0, 0)
         self.uav1 = UAV(0.0, 0.0, 1.0, 1)
 
@@ -88,14 +65,46 @@ class Server:
 
         self.tracking_distance = 0.0
 
-        # rospy.Subscriber('/firefly1/ground_truth/pose', PoseStamped, get_position1)
-        # rospy.Subscriber('/firefly2/ground_truth/pose', PoseStamped, get_position2)
+        rospy.Subscriber('/firefly1/ground_truth/pose', PoseStamped, self.get_position1)
+        rospy.Subscriber('/firefly2/ground_truth/pose', PoseStamped, self.get_position2)
         # rospy.Subscriber('/firefly3/ground_truth/pose', PoseStamped, get_position3)
         # rospy.Subscriber('/firefly4/ground_truth/pose', PoseStamped, get_position4)
         # rospy.Subscriber('/firefly5/ground_truth/pose', PoseStamped, get_position5)
         rospy.Subscriber('/firefly6/ground_truth/pose', PoseStamped, self.move_target)
 
+    def make_str(self, id, x, y, z):
+        return (str(id) + '&' + str(x) + '&' + str(y) + '&' + str(z))
+
+    def get_position1(self, data):
+        if self.interface_address is not None:
+            global pose1
+            pose1 = data
+            x = data.pose.position.x
+            y = data.pose.position.y
+            z = data.pose.position.z
+
+            self.s.sendto((self.make_str(0, x, y, z)).encode('utf-8'), self.interface_address)
+
+    def get_position2(self, data):
+        if self.interface_address is not None:
+            global pose2
+            pose2 = data
+            x = data.pose.position.x
+            y = data.pose.position.y
+            z = data.pose.position.z
+
+            self.s.sendto((self.make_str(1, x, y, z)).encode('utf-8'), self.interface_address)
+
     def move_target(self, data):
+        if self.interface_address is not None:
+            global pose1
+            pose1 = data
+            x = data.pose.position.x
+            y = data.pose.position.y
+            z = data.pose.position.z
+
+            self.s.sendto((self.make_str('t', x, y, z)).encode('utf-8'), self.interface_address)
+
         position = data.pose.position
         global target
         global target_direction
@@ -135,6 +144,7 @@ class Server:
 
         global is_tracking
         if is_tracking:
+            # to 1st quadrant
             if target_direction == 1:
                 self.uav0.x = target.x - 0.5 - self.tracking_distance
                 self.uav0.y = target.y - self.tracking_distance
@@ -142,6 +152,7 @@ class Server:
                 self.uav1.x = target.x + 0.5 + self.tracking_distance
                 self.uav1.y = target.y - self.tracking_distance
 
+            # to 2nd quadrant
             if target_direction == 2:
                 self.uav0.x = target.x + self.tracking_distance
                 self.uav0.y = target.y - 0.5 - self.tracking_distance
@@ -149,6 +160,7 @@ class Server:
                 self.uav1.x = target.x + self.tracking_distance
                 self.uav1.y = target.y + 0.5 + self.tracking_distance
 
+            # to 3rd quadrant
             if target_direction == 3:
                 self.uav0.x = target.x + 0.5 + self.tracking_distance
                 self.uav0.y = target.y + self.tracking_distance
@@ -156,6 +168,7 @@ class Server:
                 self.uav1.x = target.x - 0.5 - self.tracking_distance
                 self.uav1.y = target.y + self.tracking_distance
 
+            # to 4th quadrant
             if target_direction == 4:
                 self.uav0.x = target.x - self.tracking_distance
                 self.uav0.y = target.y + 0.5 + self.tracking_distance
@@ -311,14 +324,18 @@ class Server:
             self.command_formation()
 
         elif data == "increase speed":
-            # self.command_spread_out()
-            global is_tracking
-            is_tracking = True
+            self.command_spread_out()
+            #global is_tracking
+            #is_tracking = True
 
         elif data == "decrease speed":
-            # self.command_aggregation()
+            self.command_aggregation()
+            #global is_tracking
+            #is_tracking = False
+
+        elif data == "tracking":
             global is_tracking
-            is_tracking = False
+            is_tracking = not is_tracking
 
         elif data == "forward" and not self.uav0.land_on:
             self.command_forward()
@@ -384,12 +401,13 @@ class Server:
         while not rospy.is_shutdown():
             data, address = self.s.recvfrom(1024)
             data = data.decode('utf-8')
+            self.interface_address = address
 
-            if data != "none":
-                rospy.loginfo(data)
+            rospy.loginfo(data)
 
             self.process_data(data, address)
-            self.s.sendto("none".encode('utf-8'), address)
+
+            # self.s.sendto("none".encode('utf-8'), address)
 
 
 if __name__ == '__main__':
